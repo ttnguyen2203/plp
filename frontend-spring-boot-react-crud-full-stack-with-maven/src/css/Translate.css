@@ -1,0 +1,20 @@
+.Translate {
+    display: flex;
+    width: 100%;
+}
+.Input {
+    margin: 2%;
+    width: 50%;
+    display: block;
+}
+
+textarea {
+    width: 99%;
+    height: 250px;
+    border-radius: 5px;
+    border-color: black;
+}
+input {
+    float: right;
+    clear: both;
+}

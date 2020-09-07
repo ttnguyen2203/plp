@@ -18,9 +18,14 @@ public class PlpServlet {
     private DataPipelineService dataPipelineService;
 
     @PostMapping("/transform/piglatin")
-    public ConsumerResultDto applyPigLatin(@RequestBody final Object data) {
+    public String applyPigLatin(@RequestBody final Object data) {
         final Map<String, ConsumerResultDto> result =
                 dataPipelineService.processSingleData(DefaultDataPipelines.PIG_LATIN_PIPELINE, data);
-        return result.get(DataPipelineConstants.PIG_LATIN_RESULT_CONSUMER_KEY);
+        return getPigLatinMappedResult(result.get(DataPipelineConstants.PIG_LATIN_RESULT_CONSUMER_KEY));
+    }
+
+    protected String getPigLatinMappedResult(final ConsumerResultDto resultDto) {
+        final Map<String, Object> resultMap = resultDto == null ? null : resultDto.getConsumedData();
+        return resultMap == null ? "" : (String) resultMap.get(DataPipelineConstants.PIG_LATIN_RESULT_LOADER_KEY);
     }
 }

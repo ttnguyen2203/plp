@@ -21,7 +21,7 @@ public class DefaultDataPipelines {
         PIG_LATIN_PIPELINE = new DataPipelineConfigDto();
         final StringLoaderConfig loaderConfig = new StringLoaderConfig();
         loaderConfig.setLoaderClass(StringLoader.class);
-        loaderConfig.setLoadStringToKey("pigLatinString");
+        loaderConfig.setLoadStringToKey(DataPipelineConstants.PIG_LATIN_RESULT_LOADER_KEY);
 
         final PigLatinMapperConfig mapperConfig = new PigLatinMapperConfig();
         mapperConfig.setMapperClass(PigLatinMapper.class);

@@ -20,9 +20,7 @@ class TestPlpServlet {
         final String input = "As a member of the Greek community";
         final String expectedOutput = "Asway away embermay ofway ethay Eekgray ommunitycay";
 
-        final ConsumerResultDto resultDto  = plpServlet.applyPigLatin(input);
-        final String output = (String) resultDto.getConsumedData().get("pigLatinString");
-
+        final String output  = plpServlet.applyPigLatin(input);
 
         Assert.isTrue(Objects.equals(expectedOutput, output));
     }

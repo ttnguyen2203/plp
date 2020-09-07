@@ -20,23 +20,19 @@ class Translate extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({
-      response: "translation"
-    }, function () {
-      console.log("___submit", this.state.response)
-    });
 
     const request_options = {
       method: 'POST',
-      body: this.state.value
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(this.state.value)
     }
-    fetch("http://localhost:8080/transform/piglatin", request_options)
-    .then(res => res.json())
+
+    fetch("http://localhost:15000/transform/piglatin", request_options)
+    .then(res => res.text())
     .then(
       (result) => {
-        console.log("______result", result)
         this.setState({
-          response: "translation"
+          response: result
         });
       },
       // Note: it's important to handle errors here

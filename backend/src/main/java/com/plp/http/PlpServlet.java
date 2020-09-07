@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.Map;
 
@@ -18,6 +19,7 @@ public class PlpServlet {
     private DataPipelineService dataPipelineService;
 
     @PostMapping("/transform/piglatin")
+    @CrossOrigin
     public String applyPigLatin(@RequestBody final Object data) {
         final Map<String, ConsumerResultDto> result =
                 dataPipelineService.processSingleData(DefaultDataPipelines.PIG_LATIN_PIPELINE, data);

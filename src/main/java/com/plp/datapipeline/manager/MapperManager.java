@@ -4,9 +4,11 @@ import com.plp.datapipeline.mappers.IMapper;
 import com.plp.datapipeline.mappers.config.MapperConfig;
 import com.plp.exception.DataPipelineException;
 import com.plp.exception.ErrorCodes;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@Component
 public class MapperManager extends DefaultComponentManager<MapperConfig, IMapper> {
 
     public Map<String, Object> mapData(final MapperConfig config,
@@ -29,6 +31,7 @@ public class MapperManager extends DefaultComponentManager<MapperConfig, IMapper
             throw new DataPipelineException(ErrorCodes.ERROR_CANNOT_INSTANTIATE_COMPONENT,
                     "Unable to instantiate mapper");
         }
+        mapper.init(config);
         return mapper;
     }
 }

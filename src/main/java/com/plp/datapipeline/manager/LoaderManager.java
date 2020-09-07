@@ -4,9 +4,11 @@ import com.plp.datapipeline.loaders.ILoader;
 import com.plp.datapipeline.loaders.config.LoaderConfig;
 import com.plp.exception.DataPipelineException;
 import com.plp.exception.ErrorCodes;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@Component
 public class LoaderManager extends DefaultComponentManager<LoaderConfig, ILoader<LoaderConfig>> {
 
     public Map<String, Object> loadData(final LoaderConfig config,
@@ -29,6 +31,7 @@ public class LoaderManager extends DefaultComponentManager<LoaderConfig, ILoader
             throw new DataPipelineException(ErrorCodes.ERROR_CANNOT_INSTANTIATE_COMPONENT,
                     "Unable to instantiate loader");
         }
+        loader.init(config);
         return loader;
     }
 

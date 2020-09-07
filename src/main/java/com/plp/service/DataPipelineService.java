@@ -9,18 +9,22 @@ import com.plp.dto.ConsumerResultDto;
 import com.plp.dto.DataPipelineConfigDto;
 import com.plp.exception.DataPipelineException;
 import com.plp.exception.ErrorCodes;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Service
 public class DataPipelineService {
 
     private final LoaderManager loaderManager;
     private final MapperManager mapperManager;
     private final ConsumerManager consumerManager;
 
+    @Autowired
     public DataPipelineService(final LoaderManager loaderManager,
                                final MapperManager mapperManager,
                                final ConsumerManager consumerManager) {
@@ -30,7 +34,7 @@ public class DataPipelineService {
     }
 
     public Map<String, ConsumerResultDto> processSingleData(@NonNull final DataPipelineConfigDto pipelineConfigDto,
-                                               @NonNull final Object data) {
+                                                            @NonNull final Object data) {
         validatePipelineConfig(pipelineConfigDto);
 
         final Map<String, Object> loadedData =
@@ -41,19 +45,22 @@ public class DataPipelineService {
     }
 
     protected Map<String, ConsumerResultDto> mapAndConsume(final DataPipelineConfigDto pipelineConfigDto,
-                                              final Map<String, Object> loadedData) {
+                                                           final Map<String, Object> loadedData) {
 
         final Map<String, MapperConfig> mapperConfigs = pipelineConfigDto.getMapperConfigs();
         final Map<String, ConsumerConfig> consumerConfigs = pipelineConfigDto.getConsumerConfigs();
         final AtomicReference<Map<String, Object>> mappedData = new AtomicReference<>(loadedData);
 
-        mapperConfigs.values().forEach(mapperConfig ->
-                this.mapperManager.mapData(mapperConfig, mappedData.get()));
+        mapperConfigs.values().forEach(mapperConfig -> {
+                    final Map<String, Object> mapped = this.mapperManager.mapData(mapperConfig, mappedData.get());
+                    mappedData.set(mapped);
+                }
+        );
 
         final Map<String, ConsumerResultDto> consumerResults = new HashMap<>();
         consumerConfigs.forEach((key, consumerConfig) -> {
-                final ConsumerResultDto result = this.consumerManager.consumeData(consumerConfig, mappedData.get());
-                consumerResults.put(key, result);
+            final ConsumerResultDto result = this.consumerManager.consumeData(consumerConfig, mappedData.get());
+            consumerResults.put(key, result);
         });
 
         return consumerResults;

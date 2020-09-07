@@ -5,9 +5,11 @@ import com.plp.datapipeline.consumers.config.ConsumerConfig;
 import com.plp.dto.ConsumerResultDto;
 import com.plp.exception.DataPipelineException;
 import com.plp.exception.ErrorCodes;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+@Component
 public class ConsumerManager extends DefaultComponentManager<ConsumerConfig, IConsumer> {
 
     public ConsumerResultDto consumeData(final ConsumerConfig config,
@@ -30,6 +32,7 @@ public class ConsumerManager extends DefaultComponentManager<ConsumerConfig, ICo
             throw new DataPipelineException(ErrorCodes.ERROR_CANNOT_INSTANTIATE_COMPONENT,
                     "Unable to instantiate consumer");
         }
+        consumer.init(config);
         return consumer;
     }
 }
